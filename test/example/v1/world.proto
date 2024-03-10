@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package example.v1;
+
+message World {
+  string name = 1;
+
+  optional string id = 2;
+
+  Orange orange = 3;
+
+  message Orange {
+    oneof color {
+      string red = 1;
+      bool blue = 2;
+      Orange orange = 3;
+    }
+  }
+}

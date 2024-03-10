@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package example.v1;
+
+message Hello {
+  oneof property {
+    int32 number = 1;
+    World world = 2;
+  }
+}
+
+message World {
+  string name = 1;
+}

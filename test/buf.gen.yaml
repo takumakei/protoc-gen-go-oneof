@@ -1,0 +1,17 @@
+version: v1
+managed:
+  enabled: true
+
+  go_package_prefix:
+    default: github.com/takumakei/protoc-gen-go-oneof/test/gen
+
+plugins:
+  - name: go
+    out: gen
+    opt:
+      - paths=source_relative
+
+  - name: go-oneof
+    out: gen
+    opt:
+      - paths=source_relative
