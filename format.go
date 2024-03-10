@@ -4,6 +4,7 @@ import (
 	"bufio"
 	_ "embed"
 	"io"
+	"os"
 	"strings"
 	"text/template"
 
@@ -13,9 +14,26 @@ import (
 //go:embed format.tmpl
 var formatTmpl string
 
-var format = template.Must(
-	template.New("").Funcs(sprig.TxtFuncMap()).Parse(formatTmpl),
-)
+var format *template.Template
+
+func InitFormat(file string) error {
+	var tmpl string
+	if file == "" {
+		file = "format.tmpl"
+		tmpl = formatTmpl
+	} else {
+		b, err := os.ReadFile(file)
+		if err != nil {
+			return err
+		}
+		tmpl = string(b)
+	}
+	tt := template.New(file)
+	tt = tt.Funcs(sprig.TxtFuncMap())
+	var err error
+	format, err = tt.Parse(tmpl)
+	return err
+}
 
 func Formatf(w io.Writer, model *Model) (err error) {
 	switch o := w.(type) {

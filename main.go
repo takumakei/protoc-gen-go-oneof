@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"strings"
@@ -11,7 +12,15 @@ import (
 )
 
 func main() {
-	protogen.Options{}.Run(func(gen *protogen.Plugin) error {
+	var flagTemplate string
+	flags := flag.NewFlagSet("", flag.ExitOnError)
+	flags.StringVar(&flagTemplate, "template", flagTemplate, "template")
+
+	protogen.Options{ParamFunc: flags.Set}.Run(func(gen *protogen.Plugin) error {
+		if err := InitFormat(flagTemplate); err != nil {
+			return err
+		}
+
 		// https://github.com/protocolbuffers/protobuf/blob/main/docs/implementing_proto3_presence.md
 		gen.SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL)
 
