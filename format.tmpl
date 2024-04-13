@@ -14,27 +14,27 @@ package {{ .Package }}
 // Use the constructor for each oneof fields.
 //
 {{ range .Fields -}}
-//   - func Oneof{{ $oneof.FullName }}_{{ .Name | camelcase | title }}({{ .Name }} {{ .Type }}) Oneof{{ $oneof.FullName }}
+//   - func Oneof{{ $oneof.FullName }}_{{ .Name | camelcase | title }}(_{{ .Name }} {{ .Type }}) Oneof{{ $oneof.FullName }}
 {{ end -}}
 type Oneof{{ .FullName }} struct {
 	oneof {{ .Interface }}
 }
 
 // Get returns the value for {{ .Parent }}.{{ .Name }}.
-func ({{ .Name }} Oneof{{ .FullName }}) Get() {{ .Interface }} {
-	return {{ .Name }}.oneof
+func (_{{ .Name }} Oneof{{ .FullName }}) Get() {{ .Interface }} {
+	return _{{ .Name }}.oneof
 }
 
 // Oneof{{ .FullName }}From returns Oneof{{ .FullName }} from the value of {{ .Interface }}.
-func Oneof{{ .FullName }}From({{ .Name }} {{ .Interface }}) Oneof{{ .FullName }} {
-	return Oneof{{ .FullName }}{oneof: {{ .Name }}}
+func Oneof{{ .FullName }}From(_{{ .Name }} {{ .Interface }}) Oneof{{ .FullName }} {
+	return Oneof{{ .FullName }}{oneof: _{{ .Name }}}
 }
 
 {{- range .Fields }}
 
 // Oneof{{ $oneof.FullName }}_{{.Name | camelcase | title}} returns Oneof{{ $oneof.FullName }}.
-func Oneof{{ $oneof.FullName }}_{{.Name | camelcase | title}}({{ .Name }} {{ .Type }}) Oneof{{ $oneof.FullName }} {
-	return Oneof{{ $oneof.FullName }}{oneof: &{{ .Struct }}{{"{"}}{{ .Name | camelcase }}: {{ .Name }}{{"}"}}}
+func Oneof{{ $oneof.FullName }}_{{.Name | camelcase | title}}(_{{ .Name }} {{ .Type }}) Oneof{{ $oneof.FullName }} {
+	return Oneof{{ $oneof.FullName }}{oneof: &{{ .Struct }}{{"{"}}{{ .GoName }}: _{{ .Name }}{{"}"}}}
 }
 
 {{- end }}
@@ -55,11 +55,11 @@ const (
 {{- end }}
 )
 
-func Oneof{{ .FullName }}KindOf({{ .Name }} {{ .Interface }}) Oneof{{ .FullName }}Kind {
-	if {{ .Name }} == nil {
+func Oneof{{ .FullName }}KindOf(_{{ .Name }} {{ .Interface }}) Oneof{{ .FullName }}Kind {
+	if _{{ .Name }} == nil {
 		return Oneof{{ .FullName }}IsNil
 	}
-	switch {{ .Name }}.(type) {
+	switch _{{ .Name }}.(type) {
 {{- range .Fields }}
 	case *{{ .Struct }}:
 		return Oneof{{ $oneof.FullName }}Is{{ .Name | camelcase | title }}

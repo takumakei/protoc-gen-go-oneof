@@ -87,8 +87,9 @@ type Oneof struct {
 }
 
 type Field struct {
-	Name string // e.g. "email", "world", "create_time"
-	Type string // e.g. "string", "*World", "*timestamppb.Timestamp"
+	Name   string // e.g. "email", "world", "create_time"
+	GoName string // FIXME: e.g. "..."
+	Type   string // e.g. "string", "*World", "*timestamppb.Timestamp"
 
 	Struct string // e.g. "Hello_Email", "Hello_World", "Hello_CreateTime"
 }

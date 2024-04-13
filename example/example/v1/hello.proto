@@ -6,6 +6,9 @@ message Hello {
   oneof property {
     int32 number = 1;
     World world = 2;
+    string string = 3;
+    string type = 4;
+    float ratio = 5;
   }
 }
 

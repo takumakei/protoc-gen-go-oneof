@@ -126,6 +126,7 @@ func NewFields(gen *protogen.Plugin, protoFile *protogen.File, g *protogen.Gener
 	for _, f := range o.Fields {
 		field := &Field{
 			Name:   string(f.Desc.Name()),
+			GoName: f.GoName,
 			Type:   TypeOf(g, f),
 			Struct: f.GoIdent.GoName,
 		}
@@ -135,9 +136,30 @@ func NewFields(gen *protogen.Plugin, protoFile *protogen.File, g *protogen.Gener
 }
 
 func TypeOf(g *protogen.GeneratedFile, f *protogen.Field) string {
-	ident := f.Desc.Kind().String()
 	if f.Desc.Kind() == protoreflect.MessageKind {
-		ident = "*" + g.QualifiedGoIdent(f.Message.GoIdent)
+		return "*" + g.QualifiedGoIdent(f.Message.GoIdent)
+	}
+	if f.Desc.Kind() == protoreflect.EnumKind {
+		return g.QualifiedGoIdent(f.Enum.GoIdent)
+	}
+	ident := f.Desc.Kind().String()
+	switch ident {
+	case "float":
+		return "float32"
+	case "double":
+		return "float64"
+	case "sint32":
+		return "int32"
+	case "sint64":
+		return "int64"
+	case "fixed32":
+		return "uint32"
+	case "fixed64":
+		return "uint64"
+	case "sfixed32":
+		return "int32"
+	case "sfixed64":
+		return "int64"
 	}
 	return ident
 }
